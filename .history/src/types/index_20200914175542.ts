@@ -1,0 +1,16 @@
+export interface Author {
+    loginname: string,
+    avatar_url: string
+  }
+  
+  export interface ResItem {
+    url:string
+    desc:string
+    cover:string
+    
+  }
+  
+  export interface Res {
+    success?: boolean,
+    data: ResItem[]
+  }
