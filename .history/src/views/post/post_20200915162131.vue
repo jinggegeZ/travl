@@ -150,18 +150,16 @@ import { useRoute, useRouter } from "vue-router";
 import api from "@/http/api";
 import { Res, ResItem } from "@/types";
 
-interface T {
+interface t {
   title: string;
-  id:number;
-  summary:string
 }
-interface Total {
-  data: T[];
+interface total {
+  data: t[];
 }
 
 interface Data {
   hotlist: ResItem[];
-  totallist: Total[];
+  totallist: total[];
   city: string;
   total: number;
   pageSizeOptions:string[]
@@ -184,47 +182,37 @@ export default defineComponent({
     });
     const route = useRoute();
     const router = useRouter();
-    //获取数据
     const getPost = (city: string) => {
       api
         .getposts({ city: city })
         .then((res: any) => {
           data.totallist = res.data;
-          const reg = new RegExp('&nbsp;','g')
-          data.totallist.map((item:any) => {
-            item.summary = item.summary.replace(reg,'')
-          })
           data.total = res.total;
           console.log(res);
         })
         .catch();
     };
-    //选中赋值
     const chose = (e: any) => {
       data.city = e.target.innerHTML;
       getPost(data.city);
       console.log(e);
     };
-    //点击搜索
     const search = () => {
       data.city = data.city;
       getPost(data.city);
     };
-    //点击修改分页
     const onShowSizeChange = (current:number, pageSize:number) => {
       data.pageSize = data.pageSize
     }
-    //点击去往编辑页
     const goedits = () => {
       router.push('/post/create')
     }
-    //点击去往文章页
-    const goairticle = (item:any) => {
+    const goairticle = (item:total) => {
       console.log(item);
       router.push({
         path:'/post/detail',
         query:{
-          msg:JSON.stringify(item)
+          item:item.target
         }
       })
     }
@@ -250,8 +238,7 @@ export default defineComponent({
       search,
       onShowSizeChange,
       goedits,
-      goairticle,
-      
+      goairticle
     };
   },
 });

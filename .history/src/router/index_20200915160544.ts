@@ -74,7 +74,7 @@ const routes: Array<RouteRecordRaw> = [
         name: '/post/detail',
         component: () => import('../views/Airticle/Airticle.vue'),
         meta: {
-          title:'文章页'
+          title:'编辑页'
         }
       },
     ]

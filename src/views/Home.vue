@@ -33,20 +33,20 @@
         <div class="cover_c">
           <div v-if="activeindex === 0">
             <a-input-search
-              v-model:value="city"
+              v-model="city"
               placeholder="搜索城市"
               style="width: 200px"
-              @search="onSearch"
-              @pressEnter="gocity"
+              @search="gotouer"
+             
             />
           </div>
           <div v-if="activeindex === 1">
             <a-input-search
-              v-model:value="hotel"
+              v-model="hotel"
               placeholder="输入城市搜索酒店"
               style="width: 200px"
-              @search="onSearch"
-              @pressEnter="pressEnter"
+              @search="gohotel"
+             
             />
           </div>
           <div v-if="activeindex === 2">
@@ -54,8 +54,6 @@
               v-model:value="hotel"
               placeholder="请输入出发地"
               style="width: 200px"
-              @search="onSearch"
-              @pressEnter="pressEnter"
             />
           </div>
         </div>
@@ -87,7 +85,7 @@ interface Data {
   activepath: string;
   city: string;
   hotel: string;
-  sales:ResItem[]
+  sales: ResItem[];
 }
 export default defineComponent({
   name: "",
@@ -99,7 +97,7 @@ export default defineComponent({
   setup(props, ctx: SetupContext) {
     let data: Data = reactive<Data>({
       arr: [],
-      
+
       list: [
         {
           name: "攻略",
@@ -118,43 +116,42 @@ export default defineComponent({
       activepath: "",
       city: "",
       hotel: "",
-      sales:[]
+      sales: [],
     });
     const router = useRouter();
     //选择item
     const choseitem = (item: Item, index: number, path: string) => {
       data.activeindex = index;
       data.activepath = item.path;
+
       if (data.activepath === "air") {
-        api
-          .getsale()
-          .then((res: Res) => {
-            data.sales = res.data
-            console.log(res);
-            if (res.data) {
-              router.push({
-                path:'air',
-                query:{
-                  msg: JSON.stringify(data.sales)
-                }
-              });
-            }
-          })
-          .catch((err: Error) => {
-            console.log(err);
-          });
+        setTimeout(() => {
+          router.push("air");
+        }, 1500);
       }
     };
-    //enter事件
-    const pressEnter = (e: string) => {
-      console.log(111);
-      console.log(e);
-    };
-    const gocity = (e: string) => {
-      console.log(111);
-      console.log(e);
-    };
+    //search事件点击搜索城市
+    const gotouer= (city:string) => {
+      console.log(city);
+      router.push({
+        path:'post',
+        query:{
+          msgs:city
+        }
+      })
+    }
+    const gohotel = (hotel:string) => {
+      console.log(hotel);
+       router.push({
+        path:'hotel',
+        query:{
+          msgs:hotel
+        }
+      })
+    }
+   
     //获取list
+
     onMounted(() => {
       api
         .getswiper()
@@ -170,8 +167,9 @@ export default defineComponent({
       city: "",
       hotel: "",
       choseitem,
-      pressEnter,
-      gocity,
+      gotouer,
+      gohotel
+    
     };
   },
 });
@@ -256,5 +254,6 @@ export default defineComponent({
 }
 .image {
   width: 100%;
+  height: 600px;
 }
 </style>

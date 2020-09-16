@@ -184,13 +184,12 @@ export default defineComponent({
     });
     const route = useRoute();
     const router = useRouter();
-    //获取数据
     const getPost = (city: string) => {
       api
         .getposts({ city: city })
         .then((res: any) => {
           data.totallist = res.data;
-          const reg = new RegExp('&nbsp;','g')
+          const reg = new RegExp('&nbsp','g')
           data.totallist.map((item:any) => {
             item.summary = item.summary.replace(reg,'')
           })
@@ -199,26 +198,21 @@ export default defineComponent({
         })
         .catch();
     };
-    //选中赋值
     const chose = (e: any) => {
       data.city = e.target.innerHTML;
       getPost(data.city);
       console.log(e);
     };
-    //点击搜索
     const search = () => {
       data.city = data.city;
       getPost(data.city);
     };
-    //点击修改分页
     const onShowSizeChange = (current:number, pageSize:number) => {
       data.pageSize = data.pageSize
     }
-    //点击去往编辑页
     const goedits = () => {
       router.push('/post/create')
     }
-    //点击去往文章页
     const goairticle = (item:any) => {
       console.log(item);
       router.push({

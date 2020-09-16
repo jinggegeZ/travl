@@ -52,7 +52,7 @@
         <div class="tui">
           <div class="tui_a">推荐攻略</div>
           <div>
-            <a-button type="primary" @click="goedits">
+            <a-button type="primary">
               <template v-slot:icon>
                 <HighlightOutlined />
               </template>写游记
@@ -60,12 +60,12 @@
           </div>
         </div>
         <!-- 推荐攻略3张图片-->
-        <div v-for="(item,index) in totallist" :key="index" >
+        <div v-for="(item,index) in totallist" :key="index">
           <div class="jian" v-if="item.images.length > 2">
-            <div class="jian_a sl" @click="goairticle(item)">{{item.title}}</div>
-            <div class="jian_b" @click="goairticle(item)">{{item.summary}}</div>
+            <div class="jian_a sl">{{item.title}}</div>
+            <div class="jian_b">{{item.summary}}</div>
             <div class="jian_c">
-              <div class="jian_dd" v-for="(item1,index1) in item.images.slice(0,3)" :key="index1" @click="goairticle(item)">
+              <div class="jian_dd" v-for="(item1,index1) in item.images.slice(0,3)" :key="index1">
                 <img class="jian_d hvr-grow" :src="item1" alt />
               </div>
             </div>
@@ -131,6 +131,7 @@
             :show-total="total => `共 ${total} 条`"
             :page-size="pageSize"
             @showSizeChange="onShowSizeChange"
+            simple
           />
         </div>
       </div>
@@ -146,27 +147,21 @@ import {
   SetupContext,
   onMounted,
 } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import api from "@/http/api";
 import { Res, ResItem } from "@/types";
-
-interface T {
+interface t {
   title: string;
-  id:number;
-  summary:string
 }
-interface Total {
-  data: T[];
+interface total {
+  data: t[];
 }
 
 interface Data {
   hotlist: ResItem[];
-  totallist: Total[];
+  totallist: total[];
   city: string;
   total: number;
-  pageSizeOptions:string[]
-  pageSize:number,
-  current:number
 }
 export default defineComponent({
   name: "",
@@ -178,56 +173,27 @@ export default defineComponent({
       totallist: [],
       city: "",
       total: 0,
-      pageSizeOptions:['3','6','9','12'],
-      pageSize:3,
-      current:1
     });
     const route = useRoute();
-    const router = useRouter();
-    //获取数据
     const getPost = (city: string) => {
       api
         .getposts({ city: city })
         .then((res: any) => {
           data.totallist = res.data;
-          const reg = new RegExp('&nbsp;','g')
-          data.totallist.map((item:any) => {
-            item.summary = item.summary.replace(reg,'')
-          })
           data.total = res.total;
           console.log(res);
         })
         .catch();
     };
-    //选中赋值
     const chose = (e: any) => {
       data.city = e.target.innerHTML;
       getPost(data.city);
       console.log(e);
     };
-    //点击搜索
     const search = () => {
       data.city = data.city;
       getPost(data.city);
     };
-    //点击修改分页
-    const onShowSizeChange = (current:number, pageSize:number) => {
-      data.pageSize = data.pageSize
-    }
-    //点击去往编辑页
-    const goedits = () => {
-      router.push('/post/create')
-    }
-    //点击去往文章页
-    const goairticle = (item:any) => {
-      console.log(item);
-      router.push({
-        path:'/post/detail',
-        query:{
-          msg:JSON.stringify(item)
-        }
-      })
-    }
     //获取传递过来的值
     onMounted(() => {
       if (route.query.msgs) {
@@ -248,10 +214,6 @@ export default defineComponent({
       getPost,
       chose,
       search,
-      onShowSizeChange,
-      goedits,
-      goairticle,
-      
     };
   },
 });

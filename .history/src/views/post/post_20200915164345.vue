@@ -152,8 +152,7 @@ import { Res, ResItem } from "@/types";
 
 interface T {
   title: string;
-  id:number;
-  summary:string
+  id:number
 }
 interface Total {
   data: T[];
@@ -184,47 +183,37 @@ export default defineComponent({
     });
     const route = useRoute();
     const router = useRouter();
-    //获取数据
     const getPost = (city: string) => {
       api
         .getposts({ city: city })
         .then((res: any) => {
           data.totallist = res.data;
-          const reg = new RegExp('&nbsp;','g')
-          data.totallist.map((item:any) => {
-            item.summary = item.summary.replace(reg,'')
-          })
           data.total = res.total;
           console.log(res);
         })
         .catch();
     };
-    //选中赋值
     const chose = (e: any) => {
       data.city = e.target.innerHTML;
       getPost(data.city);
       console.log(e);
     };
-    //点击搜索
     const search = () => {
       data.city = data.city;
       getPost(data.city);
     };
-    //点击修改分页
     const onShowSizeChange = (current:number, pageSize:number) => {
       data.pageSize = data.pageSize
     }
-    //点击去往编辑页
     const goedits = () => {
       router.push('/post/create')
     }
-    //点击去往文章页
-    const goairticle = (item:any) => {
+    const goairticle = (item:Total) => {
       console.log(item);
       router.push({
         path:'/post/detail',
         query:{
-          msg:JSON.stringify(item)
+          id:item
         }
       })
     }
@@ -250,8 +239,7 @@ export default defineComponent({
       search,
       onShowSizeChange,
       goedits,
-      goairticle,
-      
+      goairticle
     };
   },
 });

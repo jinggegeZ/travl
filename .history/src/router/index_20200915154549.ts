@@ -61,22 +61,6 @@ const routes: Array<RouteRecordRaw> = [
           title:'编辑页'
         }
       },
-      {
-        path: '/post/create',
-        name: '/post/create',
-        component: () => import('../views/create/create.vue'),
-        meta: {
-          title:'编辑页'
-        }
-      },
-      {
-        path: '/post/detail',
-        name: '/post/detail',
-        component: () => import('../views/Airticle/Airticle.vue'),
-        meta: {
-          title:'文章页'
-        }
-      },
     ]
 
     

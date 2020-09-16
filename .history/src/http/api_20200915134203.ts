@@ -16,10 +16,5 @@ export default {
   //4.获取posts
   getposts({city}:{city:string|number}){
     return service.get(`/posts?city=${city}`)
-  },
-  //5.获取推荐文章
-  getrecommed({id}:{id:number}){
-    return service.get(`/posts/recommend?id=${id}`)
   }
-
 }
